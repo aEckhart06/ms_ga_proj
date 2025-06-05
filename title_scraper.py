@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+import os
 import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -145,7 +146,12 @@ def main():
 
 if __name__ == "__main__":
 #   main() 
+    port = os.environ.get('PORT', 5000)
     app.run(debug=True)
+
+@app.route("/", methods=["GET"])
+def index():
+    return jsonify({"message": "Welcome to the MS GA Contestants Scraper API!"})    
 
 @app.route("/updatedb", methods=["POST"])
 def updatedb():
