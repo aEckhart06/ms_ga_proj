@@ -154,15 +154,16 @@ def index():
     return jsonify({"message": "Welcome to the MS GA Contestants Scraper API!"})    
 
 @app.route("/updatedb", methods=["POST"])
-def updatedb():
-    main()
+async def updatedb():
+    await main()
+    return jsonify({"message": "Database updated successfully!"})
 
 @app.route("/contestants", methods=["GET"])
 def get_contestants():
     try:
         contestants = collection.find().sort("amount_raised", -1).limit(10)
         # Serialize the documents to JSON format
-        return [serialize_document(contestant) for contestant in contestants]
+        return jsonify([serialize_document(contestant) for contestant in contestants])
     except Exception as e:
         print(f"Error retrieving contestants: {str(e)}")
-        return []
+        return jsonify({"error": "Failed to retrieve contestants"}), 500
